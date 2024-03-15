@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas 3 JS Eksternal</title>
+</head>
+<body>
+    <form action="" id="form">
+        <table style="width: 50%; background-color:darksalmon; border: 1px solid;text-align:center; margin:auto; padding:20px" >
+            <tr>
+                <th colspan="2">Form Input</th>
+            </tr>
+            <tr>
+                <td><label for="">Nama</label></td>
+                <td><input type="text" name="nama" id="" placeholder="Masukkan nama anda"></td>
+            </tr>
+            <tr>
+                <td><label for="">Pekerjaan</label></td>
+                <td><input type="text" name="pekerjaan" id="" placeholder="Masukkan pekerjaan anda"></td>
+            </tr>
+            <tr>
+                <td><label for="">Hobby</label></td>
+                <td><input type="text" name="hobby" id="" placeholder="Masukkan hobby anda"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="Submit" onclick="dataInput()">
+                </td>
+            </tr>
+        </table>
+        <center>
+            <input type="button" value="Clear" onclick="clearHasil()">
+        </center>
+    </form>
+    <br>
+    <div id="hasil" style="width: 100%; text-align:center">
+    </div>
+    <br>
+
+    <script src="./tugasjs3.js"></script>
+</body>
+</html>
