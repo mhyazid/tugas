@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <title>Tugas 4 JS</title>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+          background-color:antiquewhite
+        }
+        th, td {
+          padding: 15px;
+        }
+        input{
+            width: 80%;
+            height: 20px;
+            border: 2px solid black;
+            border-radius: 4px;
+        }
+        input[type=button]{
+            width: 50%;
+            background-color: beige;
+            border: 2px solid black;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <form action="" id="input">
+        <table style="width: 40%;text-align:center; margin:auto; margin-top:50px" >
+            <tr>
+                <th colspan="2">From Pengecekan Gaji</th>
+            </tr>
+            <tr>
+                <td><label for="">Nama Pegawai</label></td>
+                <td><input type="text" name="namapegawai" id="" placeholder="Masukkan nama anda"></td>
+            </tr>
+            <tr>
+                <td><label for="">Jabatan</label></td>
+                <td><select name="jabatan" id=""></select></td>
+            </tr>
+            <tr>
+                <td><label for="">Status</label></td>
+                <td><select name="statusMenikah" id=""></select></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="Submit" onclick="cetak()">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <div id="hasil" style="width: 100%; text-align:center">
+    </div>
+    <br>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="./tugasjs4.js"></script>
+</body>
+</html>
