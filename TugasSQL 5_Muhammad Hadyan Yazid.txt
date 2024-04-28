@@ -1,0 +1,243 @@
+Soal
+
+4.1
+
+1. mysql> SELECT pesanan.id, pesanan.tanggal, pesanan. total, pelanggan.kode, pelanggan.nama,
+    -> kartu.nama as nama_kartu, kartu.diskon
+    -> FROM pesanan INNER JOIN pelanggan ON pesanan.pelanggan_id = pelanggan.id
+    -> INNER JOIN kartu ON pelanggan.kartu_id = kartu.id
+    -> ;
++----+------------+---------+------+--------------------+---------------+--------+
+| id | tanggal    | total   | kode | nama               | nama_kartu    | diskon |
++----+------------+---------+------+--------------------+---------------+--------+
+|  1 | 2015-11-04 | 9720000 | C001 | Agung Sedayu Group | Gold Utama    |   0.05 |
+|  2 | 2015-11-04 |   17500 | C003 | Sekar Mirah        | Gold Utama    |   0.05 |
+|  3 | 2015-11-04 |       0 | C006 | Gayatri Dwi        | Gold Utama    |   0.05 |
+|  4 | 2015-11-04 |       0 | C007 | Dewi Gyat          | Gold Utama    |   0.05 |
+|  5 | 2015-11-04 |       0 | C010 | Cassanndra         | Gold Utama    |   0.05 |
+|  6 | 2015-11-04 |       0 | C002 | Pandan Wangi       | Platinum Jaya |    0.1 |
+|  7 | 2015-11-04 |       0 | C005 | Pradabashu         | Platinum Jaya |    0.1 |
+|  8 | 2015-11-04 |       0 | C004 | Swandaru Geni      | Non Member    |      0 |
+|  9 | 2015-11-04 |       0 | C008 | Andre Haru         | Non Member    |      0 |
+| 10 | 2015-11-04 |       0 | C009 | Ahmad Hasan        | Non Member    |      0 |
+| 11 | 2015-11-04 |   30000 | C009 | Ahmad Hasan        | Non Member    |      0 |
++----+------------+---------+------+--------------------+---------------+--------+
+11 rows in set (0.00 sec)
+
+2. mysql> SELECT pembelian.id, pembelian.tanggal, pembelian.nomor, pembelian.jumlah, pembelian.harga,
+    -> produk.nama, vendor.nama, vendor.kontak FROM pembelian INNER JOIN produk
+    -> ON pembelian.produk_id = produk.id
+    -> INNER JOIN vendor ON pembelian.vendor_id = vendor.id;
++----+------------+-------+--------+---------+-------------------+----------------------+-----------------+
+| id | tanggal    | nomor | jumlah | harga   | nama              | nama                 | kontak          |
++----+------------+-------+--------+---------+-------------------+----------------------+-----------------+
+|  1 | 2019-10-10 | P001  |      2 | 3500000 | Televisi 21 inchs | PT Guna Samudra      | Ali Nurdin      |
+|  2 | 2019-11-20 | P002  |      5 | 5500000 | Televisi 40 inch  | PT Pondok C9         | Putri Ramadhani |
+|  3 | 2019-12-12 | P003  |      5 | 5400000 | Televisi 40 inch  | PT Guna Samudra      | Ali Nurdin      |
+|  4 | 2020-01-20 | P004  |    200 |    1800 | Teh Botol         | CV Jaya Raya Semesta | Dwi Rahayu      |
+|  5 | 2020-01-20 | P005  |    100 |    2300 | Teh Kotak         | CV Jaya Raya Semesta | Dwi Rahayu      |
++----+------------+-------+--------+---------+-------------------+----------------------+-----------------+
+5 rows in set (0.00 sec)
+
+3. mysql> SELECT
+    ->     pesanan.id,
+    ->     pesanan.tanggal,
+    ->     pesanan.total,
+    ->     produk.kode,
+    ->     produk.nama,
+    ->     jenis_produk.nama,
+    ->     pesanan_items.qty,
+    ->     pesanan_items.harga AS harga_jual
+    -> FROM
+    ->     pesanan
+    -> INNER JOIN
+    ->     pelanggan ON pesanan.pelanggan_id = pelanggan.id
+    -> INNER JOIN
+    ->     pesanan_items ON pesanan.id = pesanan_items.pesanan_id
+    -> INNER JOIN
+    ->     produk ON pesanan_items.produk_id = produk.id
+    -> INNER JOIN
+    ->     jenis_produk ON produk.jenis_produk_id = jenis_produk.id;
++----+------------+---------+------+-------------------+-------------+------+------------+
+| id | tanggal    | total   | kode | nama              | nama        | qty  | harga_jual |
++----+------------+---------+------+-------------------+-------------+------+------------+
+|  1 | 2015-11-04 | 9720000 | TV01 | Televisi 21 inchs | elektroniks |    1 |    5040000 |
+|  1 | 2015-11-04 | 9720000 | K001 | Kulkas 2 pintu    | elektroniks |    1 |    4680000 |
+|  2 | 2015-11-04 |   17500 | TK01 | Teh Kotak         | minuman     |    5 |       3500 |
+|  3 | 2015-11-04 |       0 | TK01 | Teh Kotak         | minuman     |   10 |       3500 |
+|  3 | 2015-11-04 |       0 | TV01 | Televisi 21 inchs | elektroniks |    1 |    5040000 |
+|  5 | 2015-11-04 |       0 | TK01 | Teh Kotak         | minuman     |   10 |       3500 |
+|  6 | 2015-11-04 |       0 | TK01 | Teh Kotak         | minuman     |   20 |       3500 |
++----+------------+---------+------+-------------------+-------------+------+------------+
+7 rows in set (0.00 sec)
+
+4.2
+
+1. mysql> CREATE VIEW pesanan_pelanggan_kartu
+    -> AS SELECT pesanan.id, pesanan.tanggal, pesanan. total, pelanggan.kode, pelanggan.nama,
+    -> kartu.nama as nama_kartu, kartu.diskon
+    -> FROM pesanan INNER JOIN pelanggan ON pesanan.pelanggan_id = pelanggan.id
+    -> INNER JOIN kartu ON pelanggan.kartu_id = kartu.id;
+
+mysql> select * from pesanan_pelanggan_kartu;
++----+------------+---------+------+--------------------+---------------+--------+
+| id | tanggal    | total   | kode | nama               | nama_kartu    | diskon |
++----+------------+---------+------+--------------------+---------------+--------+
+|  1 | 2015-11-04 | 9720000 | C001 | Agung Sedayu Group | Gold Utama    |   0.05 |
+|  2 | 2015-11-04 |   17500 | C003 | Sekar Mirah        | Gold Utama    |   0.05 |
+|  3 | 2015-11-04 |       0 | C006 | Gayatri Dwi        | Gold Utama    |   0.05 |
+|  4 | 2015-11-04 |       0 | C007 | Dewi Gyat          | Gold Utama    |   0.05 |
+|  5 | 2015-11-04 |       0 | C010 | Cassanndra         | Gold Utama    |   0.05 |
+|  6 | 2015-11-04 |       0 | C002 | Pandan Wangi       | Platinum Jaya |    0.1 |
+|  7 | 2015-11-04 |       0 | C005 | Pradabashu         | Platinum Jaya |    0.1 |
+|  8 | 2015-11-04 |       0 | C004 | Swandaru Geni      | Non Member    |      0 |
+|  9 | 2015-11-04 |       0 | C008 | Andre Haru         | Non Member    |      0 |
+| 10 | 2015-11-04 |       0 | C009 | Ahmad Hasan        | Non Member    |      0 |
+| 11 | 2015-11-04 |   30000 | C009 | Ahmad Hasan        | Non Member    |      0 |
++----+------------+---------+------+--------------------+---------------+--------+
+11 rows in set (0.00 sec)
+
+2. mysql> CREATE VIEW pembelian_produk_vendor
+    -> AS SELECT p.id, p.tanggal, p.nomor, p.jumlah, p.harga,
+    -> pr.nama, v.nama as nama_vendor, v.kontak FROM pembelian p INNER JOIN produk pr
+    -> ON p.produk_id = pr.id
+    -> INNER JOIN vendor v ON p.vendor_id = v.id;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM pembelian_produk_vendor;
++----+------------+-------+--------+---------+-------------------+----------------------+-----------------+
+| id | tanggal    | nomor | jumlah | harga   | nama              | nama_vendor          | kontak          |
++----+------------+-------+--------+---------+-------------------+----------------------+-----------------+
+|  1 | 2019-10-10 | P001  |      2 | 3500000 | Televisi 21 inchs | PT Guna Samudra      | Ali Nurdin      |
+|  2 | 2019-11-20 | P002  |      5 | 5500000 | Televisi 40 inch  | PT Pondok C9         | Putri Ramadhani |
+|  3 | 2019-12-12 | P003  |      5 | 5400000 | Televisi 40 inch  | PT Guna Samudra      | Ali Nurdin      |
+|  4 | 2020-01-20 | P004  |    200 |    1800 | Teh Botol         | CV Jaya Raya Semesta | Dwi Rahayu      |
+|  5 | 2020-01-20 | P005  |    100 |    2300 | Teh Kotak         | CV Jaya Raya Semesta | Dwi Rahayu      |
++----+------------+-------+--------+---------+-------------------+----------------------+-----------------+
+5 rows in set (0.00 sec)
+
+3. mysql> CREATE VIEW tabel_detail_pemesanan AS SELECT
+    -> pesanan.id,
+    -> pesanan.tanggal,
+    -> pesanan.total,
+    -> produk.kode,
+    -> produk.nama AS nama_produk,
+    -> jenis_produk.nama AS jenis,
+    -> pesanan_items.qty,
+    -> pesanan_items.harga AS harga_jual
+    -> FROM
+    -> pesanan
+    -> INNER JOIN
+    -> pelanggan ON pesanan.pelanggan_id = pelanggan.id
+    -> INNER JOIN
+    -> pesanan_items ON pesanan.id = pesanan_items.pesanan_id
+    -> INNER JOIN
+    -> produk ON pesanan_items.produk_id = produk.id
+    -> INNER JOIN
+    -> jenis_produk ON produk.jenis_produk_id = jenis_produk.id;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM tabel_detail_pemesanan;
++----+------------+---------+------+-------------------+-------------+------+------------+
+| id | tanggal    | total   | kode | nama_produk       | jenis       | qty  | harga_jual |
++----+------------+---------+------+-------------------+-------------+------+------------+
+|  1 | 2015-11-04 | 9720000 | TV01 | Televisi 21 inchs | elektroniks |    1 |    5040000 |
+|  1 | 2015-11-04 | 9720000 | K001 | Kulkas 2 pintu    | elektroniks |    1 |    4680000 |
+|  2 | 2015-11-04 |   17500 | TK01 | Teh Kotak         | minuman     |    5 |       3500 |
+|  3 | 2015-11-04 |       0 | TK01 | Teh Kotak         | minuman     |   10 |       3500 |
+|  3 | 2015-11-04 |       0 | TV01 | Televisi 21 inchs | elektroniks |    1 |    5040000 |
+|  5 | 2015-11-04 |       0 | TK01 | Teh Kotak         | minuman     |   10 |       3500 |
+|  6 | 2015-11-04 |       0 | TK01 | Teh Kotak         | minuman     |   20 |       3500 |
++----+------------+---------+------+-------------------+-------------+------+------------+
+7 rows in set (0.00 sec)
+
+mysql>
+
+4.3
+
+1. mysql> START TRANSACTION;
+
+INSERT INTO produk(kode,nama,harga_beli,harga_jual,stok,min_stok,jenis_produk_id) VALUES
+    -> ('PROD004', 'Produk 4', 50000, 75000, 20, 5,1),
+    -> ('PROD005', 'Produk 5', 60000, 85000, 15, 3,2),
+    -> ('PROD006', 'Produk 6', 70000, 95000, 25, 6,3);
+
+UPDATE produk set stok=6 WHERE kode='TV01';
+
+
+SAVEPOINT cekpoint_satu;
+
+
+DELETE FROM pembayaran WHERE nokuitansi='MD001';
+
+
+ROLLBACK TO SAVEPOINT cekpoint_satu;
+
+
+UPDATE kartu SET iuran = 10000 WHERE kode = 'PGU';
+
+
+COMMIT;
+
+
+select * from produk;
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| id | kode    | nama              | harga_beli | harga_jual | stok | min_stok | foto                   | deskripsi                                                                                                                                                                                                           | jenis_produk_id |
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+|  1 | TV01    | Televisi 21 inchs |    3500000 |   50500000 |    6 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+|  2 | TV02    | Televisi 40 inch  |    5500000 |    7440000 |    4 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+|  3 | K001    | Kulkas 2 pintu    |    3500000 |    4680000 |    6 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+|  4 | M001    | Meja Makan        |     500000 |     600000 |    4 |        3 | NULL                   | NULL                                                                                                                                                                                                                |               2 |
+|  5 | TK01    | Teh Kotak         |       3000 |       3500 |    6 |       10 | foto-5.png             | NULL                                                                                                                                                                                                                |               4 |
+|  6 | PC01    | PC Desktop HP     |    7000000 |    9984000 |    9 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+|  7 | TB01    | Teh Botol         |       2000 |       2500 |   53 |       10 | foto-7.jpg             | NULL                                                                                                                                                                                                                |               4 |
+|  8 | AC01    | Notebook Acer S   |    8000000 |   11232000 |    7 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+|  9 | LN01    | Notebook Lenovo   |    9000000 |   12480000 |    9 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+| 11 | L005    | Laptop Lenovo     |   13000000 |   16000000 |    5 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+| 15 | L112    | Kopi              |      20000 |      30000 |   10 |       15 | foto-15.png            | Luwak White Coffee merupakan bubuk biji kopi luwak yang dikombinasikan dengan gurihnya krimer serta manisnya gula. Keharuman kopi serta rasa manisnya yang pas juga membuat popularitas Luwak White Coffee melejit. |               4 |
+| 16 | L113    | Teh Sosro 2       |      10000 |      15000 |   10 |       12 | .png                   | NULL                                                                                                                                                                                                                |               1 |
+| 18 | L0015   | Laptop Asus       |    3000000 |    5000000 |   10 |       20 | foto-65542ffa66604.jpg | NULL                                                                                                                                                                                                                |               1 |
+| 19 | TV0115  | Televisi 22 inc`  |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 20 | TV0116  | Televisi 23 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 21 | TV0117  | Televisi 24 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 22 | TV0118  | Televisi 25 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 24 | TV0120  | Televisi 27 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 25 | TV0121  | Televisi 28 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 26 | TV0122  | Televisi 29 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 27 | THP001  | Teh Pucuk         |       4000 |       5000 |   10 |        2 | pucuk.jpg              | Teh pucuk adalah                                                                                                                                                                                                    |               4 |
+| 28 | THP002  | Teh Pucuk2        |       4000 |       5000 |   10 |        2 | pucuk.jpg              | Teh pucuk adalah                                                                                                                                                                                                    |               4 |
+| 29 | PROD004 | Produk 4          |      50000 |      75000 |   20 |        5 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 30 | PROD005 | Produk 5          |      60000 |      85000 |   15 |        3 | NULL                   | NULL                                                                                                                                                                                                                |               2 |
+| 31 | PROD006 | Produk 6          |      70000 |      95000 |   25 |        6 | NULL                   | NULL                                                                                                                                                                                                                |               3 |
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+25 rows in set (0.00 sec)
+
+mysql> select * from kartu;
++----+------+---------------+--------+--------+
+| id | kode | nama          | diskon | iuran  |
++----+------+---------------+--------+--------+
+|  1 | GOLD | Gold Utama    |   0.05 | 100000 |
+|  2 | PLAT | Platinum Jaya |    0.1 | 150000 |
+|  3 | SLV  | Silver        |  0.025 |  50000 |
+|  4 | NO   | Non Member    |      0 |      0 |
+|  7 | PGU  | Perunggu      |    0.5 |  10000 |
++----+------+---------------+--------+--------+
+5 rows in set (0.00 sec)
+
+
+2. Pernyataan LOCK TABLES READ digunakan dalam MySQL untuk mengunci tabel dalam mode baca saja. Ini berguna ketika Anda ingin mengamankan tabel dari perubahan selama operasi baca yang panjang atau kompleks. Beberapa situasi di mana Anda mungkin ingin menggunakan LOCK TABLES READ termasuk:
+
+a. Konsistensi Data: Ketika Anda ingin memastikan konsistensi data selama operasi baca yang panjang. Dengan mengunci tabel, Anda mencegah perubahan data yang mungkin terjadi oleh koneksi lain.
+b. Operasi Laporan: Ketika melakukan operasi laporan atau analisis yang memerlukan akses ke data yang konsisten dan tidak berubah.
+c. Backup: Saat membuat salinan cadangan (backup) dari tabel. Dengan mengunci tabel untuk baca, Anda memastikan bahwa tidak ada perubahan yang terjadi selama proses pencadangan.
+d. Optimisasi Kinerja: Dalam beberapa kasus, mengunci tabel untuk baca dapat meningkatkan kinerja aplikasi dengan meminimalkan konflik dan overhead yang terkait dengan operasi penulisan.
+
+
+3. Pernyataan LOCK TABLES WRITE dalam MySQL digunakan untuk mengunci tabel dalam mode tulis. Ini memungkinkan Anda untuk mengeksekusi operasi tulis (seperti INSERT, UPDATE, atau DELETE) tanpa interferensi dari koneksi lain yang mencoba melakukan operasi serupa pada tabel yang sama. Berikut adalah beberapa situasi di mana penggunaan LOCK TABLES WRITE mungkin tepat:
+
+a. Transaksi Penulisan yang Panjang: Ketika Anda ingin memastikan konsistensi data dan integritas referensial selama operasi penulisan yang panjang atau kompleks. Dengan mengunci tabel untuk tulis, Anda mencegah modifikasi data oleh koneksi lain yang dapat memengaruhi hasil operasi Anda.
+b. Operasi Penting yang Memerlukan Konsistensi: Misalnya, ketika Anda melakukan migrasi data atau pembaruan besar yang membutuhkan konsistensi absolut dalam basis data Anda. Mengunci tabel memastikan tidak ada operasi lain yang mengganggu saat proses ini berlangsung.
+c. Sinkronisasi Data: Dalam beberapa kasus, Anda mungkin perlu memastikan bahwa tabel tertentu tidak berubah selama proses sinkronisasi data antara beberapa sistem atau database.
+d. Menghindari Deadlocks: Mengunci tabel untuk tulis juga bisa membantu menghindari deadlocks, terutama dalam skenario di mana ada banyak koneksi yang bersaing untuk mengakses dan memodifikasi data pada saat yang bersamaan.
+
+
