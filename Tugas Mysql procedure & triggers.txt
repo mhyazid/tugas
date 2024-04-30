@@ -1,0 +1,302 @@
+Soal
+
+6.1
+
+1. mysql> DELIMITER $$
+mysql> CREATE PROCEDURE pro_naik(
+    -> IN jenis_produk INT,
+    -> IN persentasi_kenaikan INT)
+    -> BEGIN
+    -> UPDATE produk SET harga_jual = harga_jual + (harga_jual * persentasi_kenaikan / 100)
+    -> WHERE jenis_produk_id = jenis_produk;
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> select nama,harga_jual,jenis_produk_id from produk;
++-------------------+------------+-----------------+
+| nama              | harga_jual | jenis_produk_id |
++-------------------+------------+-----------------+
+| Televisi 21 inchs |   50500000 |               1 |
+| Televisi 40 inch  |    7440000 |               1 |
+| Kulkas 2 pintu    |    4680000 |               1 |
+| Meja Makan        |     600000 |               2 |
+| Teh Kotak         |       3500 |               4 |
+| PC Desktop HP     |    9984000 |               5 |
+| Teh Botol         |       2500 |               4 |
+| Notebook Acer S   |   11232000 |               5 |
+| Notebook Lenovo   |   12480000 |               5 |
+| Laptop Lenovo     |   16000000 |               1 |
+| Kopi              |      30000 |               4 |
+| Teh Sosro 2       |      15000 |               1 |
+| Laptop Asus       |    5000000 |               1 |
+| Televisi 22 inc`  |   50500000 |               1 |
+| Televisi 23 inc   |   50500000 |               1 |
+| Televisi 24 inc   |   50500000 |               1 |
+| Televisi 25 inc   |   50500000 |               1 |
+| Televisi 27 inc   |   50500000 |               1 |
+| Televisi 28 inc   |   50500000 |               1 |
+| Televisi 29 inc   |   50500000 |               1 |
+| Teh Pucuk         |       5000 |               4 |
+| Teh Pucuk2        |       5000 |               4 |
+| Produk 4          |      75000 |               1 |
+| Produk 5          |      85000 |               2 |
+| Produk 6          |      95000 |               3 |
++-------------------+------------+-----------------+
+25 rows in set (0.00 sec)
+
+mysql> call pro_naik(4,10);
+Query OK, 5 rows affected (0.00 sec)
+
+mysql> select nama,harga_jual,jenis_produk_id from produk;
++-------------------+------------+-----------------+
+| nama              | harga_jual | jenis_produk_id |
++-------------------+------------+-----------------+
+| Televisi 21 inchs |   50500000 |               1 |
+| Televisi 40 inch  |    7440000 |               1 |
+| Kulkas 2 pintu    |    4680000 |               1 |
+| Meja Makan        |     600000 |               2 |
+| Teh Kotak         |       3850 |               4 |
+| PC Desktop HP     |    9984000 |               5 |
+| Teh Botol         |       2750 |               4 |
+| Notebook Acer S   |   11232000 |               5 |
+| Notebook Lenovo   |   12480000 |               5 |
+| Laptop Lenovo     |   16000000 |               1 |
+| Kopi              |      33000 |               4 |
+| Teh Sosro 2       |      15000 |               1 |
+| Laptop Asus       |    5000000 |               1 |
+| Televisi 22 inc`  |   50500000 |               1 |
+| Televisi 23 inc   |   50500000 |               1 |
+| Televisi 24 inc   |   50500000 |               1 |
+| Televisi 25 inc   |   50500000 |               1 |
+| Televisi 27 inc   |   50500000 |               1 |
+| Televisi 28 inc   |   50500000 |               1 |
+| Televisi 29 inc   |   50500000 |               1 |
+| Teh Pucuk         |       5500 |               4 |
+| Teh Pucuk2        |       5500 |               4 |
+| Produk 4          |      75000 |               1 |
+| Produk 5          |      85000 |               2 |
+| Produk 6          |      95000 |               3 |
++-------------------+------------+-----------------+
+25 rows in set (0.00 sec)
+
+2. mysql> DELIMITER $$
+mysql> CREATE FUNCTION umur(tgl_lahir DATE)
+    -> RETURNS INT
+    -> BEGIN
+    -> DECLARE umur INT;
+    -> SET umur = YEAR(CURDATE())-YEAR(tgl_lahir);
+    -> RETURN umur;
+    -> END $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT nama,umur(tgl_lahir) AS umur FROM pelanggan ORDER BY umur;
++--------------------+------+
+| nama               | umur |
++--------------------+------+
+| Ira                |    1 |
+| Andi Wijaya        |    1 |
+| Agung Sedayu Group |   14 |
+| Ahmad Hasan        |   32 |
+| Andre Haru         |   34 |
+| Cassanndra         |   34 |
+| Dewi Gyat          |   36 |
+| Gayatri Dwi        |   37 |
+| Pradabashu         |   39 |
+| Sekar Mirah        |   41 |
+| Swandaru Geni      |   43 |
+| Pandan Wangi       |   74 |
++--------------------+------+
+12 rows in set (0.00 sec)
+
+3. mysql> CREATE FUNCTION kategori_harga(harga_jual DOUBLE)
+    -> RETURNS TEXT
+    -> BEGIN
+    -> DECLARE kategori TEXT;
+    -> IF harga_jual >= 0 AND harga_jual <= 500000 THEN
+    -> SET kategori = 'Murah';
+    -> ELSEIF harga_jual >= 500001 AND harga_jual <= 3000000 THEN
+    -> SET kategori = 'Sedang';
+    -> ELSEIF harga_jual >= 3000001 AND harga_jual <= 10000000 THEN
+    -> SET kategori = 'Mahal';
+    -> ELSE
+    -> SET kategori = 'Sangat Mahal';
+    -> END IF;
+    -> RETURN kategori;
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT nama,harga_jual,kategori_harga(harga_jual) AS kategori FROM produk ORDER BY harga_jual;
++-------------------+------------+--------------+
+| nama              | harga_jual | kategori     |
++-------------------+------------+--------------+
+| Teh Botol         |       2750 | Murah        |
+| Teh Kotak         |       3850 | Murah        |
+| Teh Pucuk         |       5500 | Murah        |
+| Teh Pucuk2        |       5500 | Murah        |
+| Teh Sosro 2       |      15000 | Murah        |
+| Kopi              |      33000 | Murah        |
+| Produk 4          |      75000 | Murah        |
+| Produk 5          |      85000 | Murah        |
+| Produk 6          |      95000 | Murah        |
+| Meja Makan        |     600000 | Sedang       |
+| Kulkas 2 pintu    |    4680000 | Mahal        |
+| Laptop Asus       |    5000000 | Mahal        |
+| Televisi 40 inch  |    7440000 | Mahal        |
+| PC Desktop HP     |    9984000 | Mahal        |
+| Notebook Acer S   |   11232000 | Sangat Mahal |
+| Notebook Lenovo   |   12480000 | Sangat Mahal |
+| Laptop Lenovo     |   16000000 | Sangat Mahal |
+| Televisi 29 inc   |   50500000 | Sangat Mahal |
+| Televisi 28 inc   |   50500000 | Sangat Mahal |
+| Televisi 27 inc   |   50500000 | Sangat Mahal |
+| Televisi 25 inc   |   50500000 | Sangat Mahal |
+| Televisi 24 inc   |   50500000 | Sangat Mahal |
+| Televisi 23 inc   |   50500000 | Sangat Mahal |
+| Televisi 22 inc`  |   50500000 | Sangat Mahal |
+| Televisi 21 inchs |   50500000 | Sangat Mahal |
++-------------------+------------+--------------+
+25 rows in set (0.00 sec)
+
+6.2
+
+1. mysql> DELIMITER $$
+mysql> CREATE TRIGGER cek_pembayaran BEFORE INSERT ON pembayaran
+    -> FOR EACH ROW
+    -> BEGIN
+    -> DECLARE total_bayar DECIMAL(10, 2);
+    -> DECLARE total_pesanan DECIMAL(10, 2);
+    -> SELECT SUM(jumlah) INTO total_bayar FROM pembayaran WHERE pesanan_id = NEW.pesanan_id;
+    -> SELECT total INTO total_pesanan FROM pesanan WHERE id = NEW.pesanan_id;
+    -> IF total_bayar + NEW.jumlah >= total_pesanan THEN
+    -> SET NEW.status_pembayaran = 'Lunas';
+    -> END IF;
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO pembayaran (nokuitansi, tanggal, jumlah, ke, pesanan_id, status_pembayaran)
+    -> VALUES ('KWI001', '2023-03-03', 200000, 1, 1,'');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from pembayaran;
++----+------------+------------+--------+------+------------+-------------------+
+| id | nokuitansi | tanggal    | jumlah | ke   | pesanan_id | status_pembayaran |
++----+------------+------------+--------+------+------------+-------------------+
+|  1 | MD001      | 0000-00-00 |  30000 |    1 |         11 | Lunas             |
+|  2 | MD002      | 2023-10-10 |  30000 |    2 |         11 | Lunas             |
+|  3 | MD003      | 2023-10-10 |  30000 |    1 |         11 | Lunas             |
+|  4 | MD004      | 2023-10-10 |  15000 |    1 |          2 |                   |
+|  5 | MD005      | 2023-10-10 |  18000 |    2 |          2 | Lunas             |
+|  6 | KWI001     | 2023-03-03 | 200000 |    1 |          1 |                   |
++----+------------+------------+--------+------+------------+-------------------+
+6 rows in set (0.00 sec)
+
+2. mysql> DELIMITER $$
+mysql> CREATE PROCEDURE kurangi_stok(IN produk_id INT, IN jumlah_pesanan INT)
+    -> BEGIN
+    ->   DECLARE stok_produk INT;
+    ->
+    ->   SELECT stok INTO stok_produk FROM produk WHERE id = produk_id;
+    ->
+    ->   SET stok_produk = stok_produk - jumlah_pesanan;
+    ->
+    ->   IF stok_produk < 0 THEN
+    ->     SIGNAL SQLSTATE '45000'
+    ->     SET MESSAGE_TEXT = 'Stok produk tidak mencukupi';
+    ->   END IF;
+    ->
+    ->   UPDATE produk SET stok = stok_produk WHERE id = produk_id;
+    -> END $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER ;
+
+
+3. mysql> DELIMITER $$
+mysql> CREATE TRIGGER trig_kurangi_stok AFTER INSERT ON pesanan_items
+    -> FOR EACH ROW
+    -> BEGIN
+    ->   -- Memanggil stored procedure kurangi_stok untuk mengurangi stok produk
+    ->   CALL kurangi_stok(NEW.produk_id, NEW.qty);
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> SELECT * FROM `produk`
+    ->
+    -> INSERT INTO pesanan_items (produk_id, pesanan_id, qty, harga) VALUES
+    -> (7, 3, 2, 7000)
+    ->
+    -> SELECT * FROM `produk`
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'INSERT INTO pesanan_items (produk_id, pesanan_id, qty, harga) VALUES
+(7, 3, ...' at line 3
+mysql> SELECT * FROM produk;
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| id | kode    | nama              | harga_beli | harga_jual | stok | min_stok | foto                   | deskripsi                                                                                                                                                                                                           | jenis_produk_id |
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+|  1 | TV01    | Televisi 21 inchs |    3500000 |   50500000 |    6 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+|  2 | TV02    | Televisi 40 inch  |    5500000 |    7440000 |    4 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+|  3 | K001    | Kulkas 2 pintu    |    3500000 |    4680000 |    6 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+|  4 | M001    | Meja Makan        |     500000 |     600000 |    4 |        3 | NULL                   | NULL                                                                                                                                                                                                                |               2 |
+|  5 | TK01    | Teh Kotak         |       3000 |       3850 |    6 |       10 | foto-5.png             | NULL                                                                                                                                                                                                                |               4 |
+|  6 | PC01    | PC Desktop HP     |    7000000 |    9984000 |    9 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+|  7 | TB01    | Teh Botol         |       2000 |       2750 |   53 |       10 | foto-7.jpg             | NULL                                                                                                                                                                                                                |               4 |
+|  8 | AC01    | Notebook Acer S   |    8000000 |   11232000 |    7 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+|  9 | LN01    | Notebook Lenovo   |    9000000 |   12480000 |    9 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+| 11 | L005    | Laptop Lenovo     |   13000000 |   16000000 |    5 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+| 15 | L112    | Kopi              |      20000 |      33000 |   10 |       15 | foto-15.png            | Luwak White Coffee merupakan bubuk biji kopi luwak yang dikombinasikan dengan gurihnya krimer serta manisnya gula. Keharuman kopi serta rasa manisnya yang pas juga membuat popularitas Luwak White Coffee melejit. |               4 |
+| 16 | L113    | Teh Sosro 2       |      10000 |      15000 |   10 |       12 | .png                   | NULL                                                                                                                                                                                                                |               1 |
+| 18 | L0015   | Laptop Asus       |    3000000 |    5000000 |   10 |       20 | foto-65542ffa66604.jpg | NULL                                                                                                                                                                                                                |               1 |
+| 19 | TV0115  | Televisi 22 inc`  |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 20 | TV0116  | Televisi 23 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 21 | TV0117  | Televisi 24 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 22 | TV0118  | Televisi 25 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 24 | TV0120  | Televisi 27 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 25 | TV0121  | Televisi 28 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 26 | TV0122  | Televisi 29 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 27 | THP001  | Teh Pucuk         |       4000 |       5500 |   10 |        2 | pucuk.jpg              | Teh pucuk adalah                                                                                                                                                                                                    |               4 |
+| 28 | THP002  | Teh Pucuk2        |       4000 |       5500 |   10 |        2 | pucuk.jpg              | Teh pucuk adalah                                                                                                                                                                                                    |               4 |
+| 29 | PROD004 | Produk 4          |      50000 |      75000 |   20 |        5 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 30 | PROD005 | Produk 5          |      60000 |      85000 |   15 |        3 | NULL                   | NULL                                                                                                                                                                                                                |               2 |
+| 31 | PROD006 | Produk 6          |      70000 |      95000 |   25 |        6 | NULL                   | NULL                                                                                                                                                                                                                |               3 |
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+25 rows in set (0.00 sec)
+
+mysql> INSERT INTO pesanan_items (produk_id, pesanan_id, qty, harga) VALUES
+    -> (7, 3, 2, 7000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM produk;
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| id | kode    | nama              | harga_beli | harga_jual | stok | min_stok | foto                   | deskripsi                                                                                                                                                                                                           | jenis_produk_id |
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+|  1 | TV01    | Televisi 21 inchs |    3500000 |   50500000 |    6 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+|  2 | TV02    | Televisi 40 inch  |    5500000 |    7440000 |    4 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+|  3 | K001    | Kulkas 2 pintu    |    3500000 |    4680000 |    6 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+|  4 | M001    | Meja Makan        |     500000 |     600000 |    4 |        3 | NULL                   | NULL                                                                                                                                                                                                                |               2 |
+|  5 | TK01    | Teh Kotak         |       3000 |       3850 |    6 |       10 | foto-5.png             | NULL                                                                                                                                                                                                                |               4 |
+|  6 | PC01    | PC Desktop HP     |    7000000 |    9984000 |    9 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+|  7 | TB01    | Teh Botol         |       2000 |       2750 |   51 |       10 | foto-7.jpg             | NULL                                                                                                                                                                                                                |               4 |
+|  8 | AC01    | Notebook Acer S   |    8000000 |   11232000 |    7 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+|  9 | LN01    | Notebook Lenovo   |    9000000 |   12480000 |    9 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               5 |
+| 11 | L005    | Laptop Lenovo     |   13000000 |   16000000 |    5 |        2 |                        | NULL                                                                                                                                                                                                                |               1 |
+| 15 | L112    | Kopi              |      20000 |      33000 |   10 |       15 | foto-15.png            | Luwak White Coffee merupakan bubuk biji kopi luwak yang dikombinasikan dengan gurihnya krimer serta manisnya gula. Keharuman kopi serta rasa manisnya yang pas juga membuat popularitas Luwak White Coffee melejit. |               4 |
+| 16 | L113    | Teh Sosro 2       |      10000 |      15000 |   10 |       12 | .png                   | NULL                                                                                                                                                                                                                |               1 |
+| 18 | L0015   | Laptop Asus       |    3000000 |    5000000 |   10 |       20 | foto-65542ffa66604.jpg | NULL                                                                                                                                                                                                                |               1 |
+| 19 | TV0115  | Televisi 22 inc`  |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 20 | TV0116  | Televisi 23 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 21 | TV0117  | Televisi 24 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 22 | TV0118  | Televisi 25 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 24 | TV0120  | Televisi 27 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 25 | TV0121  | Televisi 28 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 26 | TV0122  | Televisi 29 inc   |    3500000 |   50500000 |    5 |        2 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 27 | THP001  | Teh Pucuk         |       4000 |       5500 |   10 |        2 | pucuk.jpg              | Teh pucuk adalah                                                                                                                                                                                                    |               4 |
+| 28 | THP002  | Teh Pucuk2        |       4000 |       5500 |   10 |        2 | pucuk.jpg              | Teh pucuk adalah                                                                                                                                                                                                    |               4 |
+| 29 | PROD004 | Produk 4          |      50000 |      75000 |   20 |        5 | NULL                   | NULL                                                                                                                                                                                                                |               1 |
+| 30 | PROD005 | Produk 5          |      60000 |      85000 |   15 |        3 | NULL                   | NULL                                                                                                                                                                                                                |               2 |
+| 31 | PROD006 | Produk 6          |      70000 |      95000 |   25 |        6 | NULL                   | NULL                                                                                                                                                                                                                |               3 |
++----+---------+-------------------+------------+------------+------+----------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+25 rows in set (0.00 sec)
+
+mysql>
